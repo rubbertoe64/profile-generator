@@ -93,7 +93,7 @@ function addEmployee(){
             break;
     }
 
-    console.log(newGuy)
+    
     listofEmployees.push(newGuy)
      
  })
@@ -112,7 +112,7 @@ function addEmployee(){
          } else {
              profile.employees = listofEmployees;
              writeToFile(profile);
-             console.log(profile)
+             
          }
      })
  })
