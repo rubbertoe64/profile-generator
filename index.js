@@ -3,6 +3,7 @@ const Employee = require('./lib/Employee');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
+const fs = require('fs')
 
 const profile = {
     teamName: '',
@@ -110,13 +111,71 @@ function addEmployee(){
              addEmployee();
          } else {
              profile.employees = listofEmployees;
+             writeToFile();
              console.log(profile)
          }
      })
  })
 }
 
-init();
+function generateHTML(prof){
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <title> ${prof.teamName} </title>
+    </head>
+    <body>
+        <div>
+            <header class=" d-flex justify-content-center display-4 bg-primary text-light p-5">${prof.teamName}</header>
+        </div>
+        <div style="margin: 0 15rem;">
+    
+            <div class="card-columns" style="display: grid; grid-template-columns:  repeat( auto-fit , minmax(350px, 1fr) );">
+                ${prof.employees.map(employee => getEmployeeCard(employee)).join('')}
+        
+            </div>
+        </div>
+    </body>
+    </html>`
+}
 
+function getEmployeeCard(employee) {
+    return `
+        <section class="card m-3 col-sm p-3 shadow-lg rounded">
+            <h5 class="card-title">${employee.getName()}</h5>
+            <h5 class="card-title">${employee.getRole()}</h5>
+            <hr>
+            <div class="card-text">ID: ${employee.getId()}</div>
+            <div class="card-text">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></div>
+            ${getRoleProperty(employee)}
+        </section>
+    `;
+
+}
+
+function getRoleProperty(employee){
+    switch (employee.getRole()) {
+        case "Employee":
+            return ``
+        case "Intern":
+            return `<div class="card-text">School: ${employee.getSchool()}</div>`
+        case "Engineer":
+            return `<div class="card-text">Github: <a href="https://github.com/${employee.getGithub()}" target="_blank">${employee.getGithub()}</a></div>`
+        case "Manager":
+            return `<div class="card-text">Office Number: ${employee.getOfficeNumber()}</div>`
+    }
+}
+
+function writeToFile(prof){
+    fs.writeFileSync(`dist/${prof.teamName}.html`, generateHTML(prof))
+}
+
+
+
+init();
 
 
