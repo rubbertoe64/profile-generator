@@ -111,7 +111,7 @@ function addEmployee(){
              addEmployee();
          } else {
              profile.employees = listofEmployees;
-             writeToFile();
+             writeToFile(profile);
              console.log(profile)
          }
      })
