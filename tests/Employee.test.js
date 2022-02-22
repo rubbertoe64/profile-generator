@@ -11,4 +11,7 @@ describe('Employee', () => {
     it('should return email', () => {
         expect(newEmployee.getEmail()).toBe('test@gmail.com')
     });
+    it('should return role', () => {
+        expect(newEmployee.getRole()).toBe('Employee')
+    });
 })
