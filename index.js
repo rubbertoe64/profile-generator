@@ -5,12 +5,16 @@ const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const fs = require('fs')
 
+// stores employee object with their given roles in the array as well as the team name
 const profile = {
     teamName: '',
     employees: [],
 }
+
+// list of all employees
 const listofEmployees = [];
 
+// init function, starts by asking for Team Name, which is also the HTML File name. Also calls the addEmployee function which asks the rest of the questions
 function init() {
     inquirer.prompt([
         {
@@ -27,7 +31,7 @@ function init() {
     })
     
 }
-
+// asks for name, id, and email and deponding on choices, will ask for different infor according to the role chose
 function addEmployee(){
     inquirer.prompt([
     
@@ -73,6 +77,7 @@ function addEmployee(){
     
     
 ])
+// has newGuy become whichever role is chosen
  .then((data) => {
      let newGuy;
     switch (data.role) {
@@ -93,10 +98,11 @@ function addEmployee(){
             break;
     }
 
-    
+    // newGuy gets put int he listofEmployees array
     listofEmployees.push(newGuy)
      
  })
+//  starts the loop of asking if you wanna add more people or stop and then generate the HTML file
  .then(()=>{
      inquirer.prompt([
          {
@@ -117,7 +123,7 @@ function addEmployee(){
      })
  })
 }
-
+// this will generate the actual content for the HTML
 function generateHTML(prof){
     return `<!DOCTYPE html>
     <html lang="en">
@@ -142,7 +148,7 @@ function generateHTML(prof){
     </body>
     </html>`
 }
-
+// adds the individual cards for the employees
 function getEmployeeCard(employee) {
     return `
         <section class="card m-3 col-sm p-3 shadow-lg rounded">
@@ -156,7 +162,7 @@ function getEmployeeCard(employee) {
     `;
 
 }
-
+// gets the Role property  to input in the getEmployeeCard function
 function getRoleProperty(employee){
     switch (employee.getRole()) {
         case "Employee":
@@ -169,7 +175,7 @@ function getRoleProperty(employee){
             return `<div class="card-text">Office Number: ${employee.getOfficeNumber()}</div>`
     }
 }
-
+// creates the file in the dist folder
 function writeToFile(prof){
     fs.writeFileSync(`dist/${prof.teamName}.html`, generateHTML(prof))
 }
